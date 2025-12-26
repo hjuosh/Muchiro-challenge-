@@ -1,2 +1,2 @@
-# Muchiro-challenge-
-Challenge para ganar premio Muchiro 
+# Muichiro-challenge-
+Challenge para ganar premio Muichiro 
