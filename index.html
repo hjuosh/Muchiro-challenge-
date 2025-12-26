@@ -3,172 +3,284 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Muichiro Tokito: El Despertar</title>
+    <title>Muichiro Tokito: El Camino de la Niebla</title>
     <style>
-        :root { --cyan: #5de2e7; --dark: #0b1014; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--dark); color: white; margin: 0; padding: 0; text-align: center; }
-        
-        /* Fondo degradado místico */
-        .main-wrapper {
-            background: linear-gradient(180deg, #0b1014 0%, #1a2d2f 100%);
-            min-height: 100vh;
-            padding: 20px;
+        :root {
+            --cyan: #5de2e7;
+            --dark: #0b1014;
+            --glass: rgba(255, 255, 255, 0.1);
         }
 
-        .container { max-width: 400px; margin: auto; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* Imagen de cabecera con respaldo */
-        .hero-img { 
-            width: 100%; 
-            border-radius: 20px; 
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background-color: var(--dark);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Fondo de Niebla Animada */
+        .mist-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(180deg, #0b1014 0%, #1a2d2f 100%);
+            z-index: -1;
+        }
+
+        .mist {
+            position: absolute;
+            width: 200%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/clouds.png');
+            opacity: 0.15;
+            animation: drift 60s linear infinite;
+        }
+
+        @keyframes drift {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        .container {
+            width: 90%;
+            max-width: 450px;
+            z-index: 10;
+            margin: 20px;
+        }
+
+        .hero-img-box {
+            width: 100%;
+            height: 250px;
+            background: #1a1a1a;
+            border-radius: 25px 25px 0 0;
             border: 2px solid var(--cyan);
-            box-shadow: 0 0 25px rgba(93, 226, 231, 0.4);
-            margin-bottom: 20px;
+            border-bottom: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(12px);
-            border-radius: 25px;
-            padding: 25px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 0 0 25px 25px;
+            padding: 35px 30px;
             border: 1px solid rgba(93, 226, 231, 0.2);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-top: 2px solid var(--cyan);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            text-align: center;
         }
 
-        .intro-text { 
-            font-style: italic; 
-            color: #a0eef0; 
-            text-align: left; 
-            font-size: 0.95rem;
-            line-height: 1.5;
-            border-left: 3px solid var(--cyan);
-            padding-left: 15px;
-            margin: 20px 0;
+        h1 {
+            color: var(--cyan);
+            letter-spacing: 3px;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(93, 226, 231, 0.6);
+            text-transform: uppercase;
         }
 
-        h1 { color: var(--cyan); letter-spacing: 1px; font-size: 1.4rem; margin: 10px 0; }
-        h2 { color: var(--cyan); font-size: 1.1rem; }
+        .intro-box {
+            text-align: left;
+            font-style: italic;
+            color: #a0eef0;
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 30px;
+            padding-left: 20px;
+            border-left: 4px solid var(--cyan);
+            background: rgba(93, 226, 231, 0.05);
+            padding: 15px;
+        }
+
+        h2 {
+            color: var(--cyan);
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(93, 226, 231, 0.2);
+            padding-bottom: 10px;
+        }
+
+        p { margin-bottom: 10px; color: #d1f7f8; }
 
         input {
-            width: 85%; padding: 12px; margin: 15px 0; border-radius: 10px;
-            border: 1px solid var(--cyan); background: #111; color: white; text-align: center;
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--cyan);
+            background: rgba(0,0,0,0.6);
+            color: white;
+            font-size: 1.1rem;
+            text-align: center;
         }
 
         button {
-            background: var(--cyan); color: #0b1014; border: none; padding: 15px 30px;
-            font-weight: bold; border-radius: 50px; cursor: pointer; width: 100%;
-            font-size: 1rem; transition: 0.3s;
+            background: var(--cyan);
+            color: #0b1014;
+            border: none;
+            padding: 18px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 8px 20px rgba(93, 226, 231, 0.3);
         }
 
         .step { display: none; }
-        .active { display: block; animation: fadeIn 1s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .active { display: block; animation: fadeIn 1s ease-out; }
 
-        .prize-banner {
-            background: #fff; color: #000; padding: 15px; border-radius: 15px;
-            font-weight: bold; margin-top: 20px; border: 3px dashed var(--cyan);
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .prize-card {
+            background: linear-gradient(135deg, #ffffff 0%, #d1f7f8 100%);
+            color: #0b1014;
+            padding: 25px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 25px;
+            border: 4px dashed var(--cyan);
+        }
+
+        .lock-msg {
+            color: #ff7e7e;
+            font-style: italic;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
 
-<div class="main-wrapper">
-    <div class="container">
-        <img src="https://images3.alphacoders.com/132/1321776.png" class="hero-img" alt="Muichiro Tokito">
+<div class="mist-container">
+    <div class="mist"></div>
+</div>
 
-        <div class="card">
-            <div id="intro-screen" class="active">
-                <h1>MUICHIRO QUEST</h1>
-                <div class="intro-text">
-                    "La niebla no está ahí para ocultar el camino, sino para recordarte que debes mirar con el corazón. <br><br>
-                    A veces olvidamos quiénes somos, pero la voluntad es como el sol: siempre termina disipando las nubes."
-                </div>
-                <button onclick="startChallenge()">ENTRAR AL SUEÑO</button>
+<div class="container">
+    <div class="hero-img-box">
+        <!-- Imagen que tienes en GitHub -->
+        <img src="muichiro-tokito.jpg" class="hero-img" alt="[Muichiro Tokito]" onerror="this.style.display='none'; document.getElementById('img-label').style.display='block'">
+        <span id="img-label" style="display:none; color:var(--cyan); font-weight: bold;">[Imagen: muichiro-tokito.jpg]</span>
+    </div>
+
+    <div class="card">
+        <!-- PANTALLA DE INICIO CON INTRO IDEALISTA -->
+        <div id="intro-screen" class="active">
+            <h1>Camino a la Claridad</h1>
+            <div class="intro-box">
+                "La niebla no está ahí para ocultar el camino, sino para recordarte que debes mirar con el corazón. 
+                <br><br>
+                A veces olvidamos quiénes somos o hacia dónde vamos, pero la voluntad es como el sol: siempre termina disipando las nubes."
+            </div>
+            <button onclick="startChallenge()">Comenzar el Despertar</button>
+        </div>
+
+        <!-- CONTENEDOR DE JUEGO -->
+        <div id="game-content" style="display:none;">
+            
+            <!-- DÍA 1 -->
+            <div id="day1" class="step">
+                <h2>DÍA 1: Las Raíces</h2>
+                <p>1. ¿De qué Luna Superior es descendiente?</p>
+                <input type="text" id="ans1" placeholder="Nombre...">
+                <p>2. ¿En cuántos meses se convirtió en Pilar?</p>
+                <input type="number" id="ans2">
+                <button onclick="checkDay1()">Sellar Día 1</button>
             </div>
 
-            <div id="game-content" style="display:none;">
-                <div id="day1" class="step">
-                    <h2>DÍA 1: Raíces y Tiempo</h2>
-                    <p>¿De qué Luna Superior es descendiente?</p>
-                    <input type="text" id="ans1" placeholder="Nombre...">
-                    <p>¿En cuántos meses se convirtió en Pilar?</p>
-                    <input type="number" id="ans2">
-                    <button onclick="checkDay1()">REVELAR VERDAD</button>
-                </div>
-
-                <div id="day2" class="step">
-                    <h2>DÍA 2: Forja y Técnica</h2>
-                    <p>¿Nombre de la 7ma postura (español o japonés)?</p>
-                    <input type="text" id="ans3">
-                    <p>¿Cómo se llama su herrero?</p>
-                    <input type="text" id="ans4">
-                    <button onclick="checkDay2()">FORTALECER ALMA</button>
-                </div>
-
-                <div id="day3" class="step">
-                    <h2>DÍA 3: El Pilar de la Niebla</h2>
-                    <p>¿Qué forma tiene su marca de cazador?</p>
-                    <input type="text" id="ans5">
-                    <p>¿Qué detalle de su hermano lleva en la espada?</p>
-                    <input type="text" id="ans6">
-                    <button onclick="checkDay3()">DISIPAR NIEBLA FINAL</button>
-                </div>
+            <!-- DÍA 2 -->
+            <div id="day2" class="step">
+                <h2>DÍA 2: La Forja</h2>
+                <p>3. Nombre de la 7ma postura de la niebla:</p>
+                <input type="text" id="ans3">
+                <p>4. ¿Cómo se llama su joven herrero?</p>
+                <input type="text" id="ans4">
+                <button onclick="checkDay2()">Sellar Día 2</button>
             </div>
 
-            <div id="final" class="step">
-                <h1 style="color: #5de2e7;">✨ RECUERDO RECUPERADO ✨</h1>
-                <p>Has demostrado ser una verdadera Hashira. Muichiro tiene algo para ti:</p>
-                <div class="prize-banner">
-                    🎁 RECOMPENSA: <br>
-                    PELUCHE DE MUICHIRO TOKITO
-                </div>
-                <p style="font-size: 0.8rem; margin-top: 15px;">(Mírame a los ojos para recibirlo)</p>
+            <!-- DÍA 3 -->
+            <div id="day3" class="step">
+                <h2>DÍA 3: La Memoria</h2>
+                <p>5. ¿Qué forma tiene su marca?</p>
+                <input type="text" id="ans5">
+                <p>6. ¿Qué detalle de su hermano lleva en la espada?</p>
+                <input type="text" id="ans6">
+                <button onclick="checkDay3()">Disipar la Niebla</button>
+            </div>
+        </div>
+
+        <!-- PANTALLA FINAL -->
+        <div id="final" class="step">
+            <h1 style="color: gold;">✨ ¡LO LOGRASTE! ✨</h1>
+            <img src="tenor.gif" style="width:100%; border-radius:15px; margin-bottom:15px;" onerror="this.style.display='none'">
+            <div class="prize-card">
+                🎁 RECOMPENSA: <br>
+                PELUCHE DE MUICHIRO TOKITO
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // IMPORTANTE: Hoy 25 de Dic (Mes 11 en JS)
+    // Fecha de inicio: 25 de Dic 2025
     const startDate = new Date(2025, 11, 25); 
     const today = new Date();
     const diffDays = Math.floor((today - startDate) / (1000 * 60 * 60 * 24)) + 1;
 
     function startChallenge() {
-        document.getElementById('intro-screen').classList.remove('active');
         document.getElementById('intro-screen').style.display = 'none';
         document.getElementById('game-content').style.display = 'block';
         
-        // Selector de días
-        if (diffDays === 1) document.getElementById('day1').classList.add('active');
-        else if (diffDays === 2) document.getElementById('day2').classList.add('active');
-        else if (diffDays >= 3) document.getElementById('day3').classList.add('active');
-        else alert("Vuelve el 25 de diciembre para empezar.");
+        // Lógica de desbloqueo real. 
+        // Si pruebas antes del 25, mostramos día 1.
+        let day = diffDays < 1 ? 1 : diffDays;
+
+        if (day === 1) document.getElementById('day1').classList.add('active');
+        else if (day === 2) document.getElementById('day2').classList.add('active');
+        else if (day >= 3) document.getElementById('day3').classList.add('active');
     }
 
     function checkDay1() {
-        if(document.getElementById('ans1').value.toLowerCase().includes("kokushibo") && document.getElementById('ans2').value == "2") {
-            alert("¡Día 1 superado! Mañana la niebla se abrirá un poco más.");
-        } else alert("Ese no es el recuerdo correcto...");
+        const a1 = document.getElementById('ans1').value.toLowerCase();
+        const a2 = document.getElementById('ans2').value;
+        if(a1.includes("kokushibo") && a2 == "2") {
+            alert("✨ ¡Día 1 completado! La niebla se aclara un poco. Vuelve mañana.");
+        } else alert("Los recuerdos siguen nublados... intenta de nuevo.");
     }
 
     function checkDay2() {
-        let a3 = document.getElementById('ans3').value.toLowerCase();
-        let a4 = document.getElementById('ans4').value.toLowerCase();
+        const a3 = document.getElementById('ans3').value.toLowerCase();
+        const a4 = document.getElementById('ans4').value.toLowerCase();
         if((a3.includes("neblina") || a3.includes("oboro")) && a4.includes("kanamori")) {
-            alert("¡Día 2 superado! Solo queda un paso para el final.");
-        } else alert("La técnica o el herrero son incorrectos.");
+            alert("✨ ¡Día 2 completado! Casi puedes ver el final.");
+        } else alert("La forja o la técnica no son correctas.");
     }
 
     function checkDay3() {
-        let a5 = document.getElementById('ans5').value.toLowerCase();
-        let a6 = document.getElementById('ans6').value.toLowerCase();
-        if(a5.includes("nube") && (a6.includes("telas") || a6.includes("guardamano"))) {
-            document.getElementById('day3').classList.remove('active');
+        const a5 = document.getElementById('ans5').value.toLowerCase();
+        const a6 = document.getElementById('ans6').value.toLowerCase();
+        if(a5.includes("nube") && (a6.includes("telas") || a6.includes("guardamano") || a6.includes("accesorio"))) {
+            document.getElementById('game-content').style.display = 'none';
             document.getElementById('final').classList.add('active');
-        } else alert("Casi... busca el último detalle del Pilar.");
+        } else alert("El último recuerdo es el más difícil...");
     }
 </script>
-
 </body>
 </html>
