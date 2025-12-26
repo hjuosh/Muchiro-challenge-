@@ -3,65 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Muichiro Challenge</title>
+    <title>REVISIÓN - Muichiro</title>
     <style>
         body { background: #0b1014; color: white; font-family: sans-serif; text-align: center; padding: 20px; }
         .box { max-width: 400px; margin: auto; border: 2px solid #5de2e7; padding: 20px; border-radius: 20px; background: rgba(255,255,255,0.05); }
         img { width: 100%; border-radius: 15px; margin-bottom: 15px; border: 1px solid #5de2e7; }
         .intro { text-align: left; font-style: italic; color: #a0eef0; border-left: 3px solid #5de2e7; padding-left: 10px; margin: 15px 0; }
-        button { background: #5de2e7; border: none; padding: 15px; width: 100%; border-radius: 50px; font-weight: bold; cursor: pointer; }
-        input { width: 80%; padding: 10px; margin: 10px 0; border-radius: 10px; border: 1px solid #5de2e7; background: #111; color: white; }
+        button { background: #5de2e7; border: none; padding: 15px; width: 100%; border-radius: 50px; font-weight: bold; cursor: pointer; margin-top: 10px; color: #000; }
+        input { width: 85%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid #5de2e7; background: #111; color: white; text-align: center; }
         .step { display: none; }
-        .active { display: block; }
+        .active { display: block; animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .test-banner { background: yellow; color: black; font-size: 0.7rem; font-weight: bold; padding: 5px; margin-bottom: 10px; border-radius: 5px; }
     </style>
 </head>
 <body>
 
 <div class="box">
-    <img src="muichiro-tokito.jpg" alt="Imagen Muichiro">
+    <div class="test-banner">MODO REVISIÓN: TODO DESBLOQUEADO</div>
+    
+    <img src="muichiro-tokito.jpg" alt="Muichiro Principal">
 
     <div id="pantalla-inicio" class="active">
         <h1>MUICHIRO QUEST</h1>
         <div class="intro">
-            "La niebla no oculta el camino, te recuerda mirar con el corazón. La voluntad es el sol que disipa las nubes."
+            "La niebla no oculta el camino... la voluntad es el sol que disipa las nubes."
         </div>
-        <button onclick="comenzar()">ENTRAR AL SUEÑO</button>
+        <button onclick="cambiar('pantalla-inicio', 'dia1')">PROBAR DÍA 1</button>
     </div>
 
-    <div id="juego" style="display:none;">
-        <div id="dia1" class="step">
-            <h2>DÍA 1</h2>
-            <p>¿De qué Luna Superior es descendiente?</p>
-            <input type="text" id="ans1">
-            <p>¿En cuántos meses fue Pilar?</p>
-            <input type="number" id="ans2">
-            <button onclick="validar1()">SIGUIENTE</button>
-        </div>
-        </div>
+    <div id="dia1" class="step">
+        <h2>DÍA 1</h2>
+        <p>¿Luna Superior ancestro?</p>
+        <input type="text" id="ans1" placeholder="Respuesta: Kokushibo">
+        <p>¿Meses para ser Pilar?</p>
+        <input type="number" id="ans2" placeholder="2">
+        <button onclick="validar1()">PROBAR DÍA 2</button>
+    </div>
+
+    <div id="dia2" class="step">
+        <h2>DÍA 2</h2>
+        <p>¿7ma postura?</p>
+        <input type="text" id="ans3" placeholder="Respuesta: Neblina">
+        <p>¿Nombre del herrero?</p>
+        <input type="text" id="ans4" placeholder="Respuesta: Kanamori">
+        <button onclick="validar2()">PROBAR DÍA 3</button>
+    </div>
+
+    <div id="dia3" class="step">
+        <h2>DÍA 3</h2>
+        <p>¿Forma de la marca?</p>
+        <input type="text" id="ans5" placeholder="Respuesta: Nubes">
+        <p>¿Detalle en la espada?</p>
+        <input type="text" id="ans6" placeholder="Respuesta: Guardamano">
+        <button onclick="validar3()">VER PANTALLA FINAL</button>
+    </div>
 
     <div id="final" class="step">
-        <h1>¡LOGRADO!</h1>
-        <img src="tenor.gif" alt="GIF Premio">
+        <h1 style="color: #5de2e7;">¡LOGRADO!</h1>
+        <img src="tenor.gif" alt="GIF Final">
         <p>Has ganado tu Peluche de Muichiro.</p>
+        <button onclick="location.reload()">REINICIAR</button>
     </div>
 </div>
 
 <script>
-    const inicio = new Date(2025, 11, 25); 
-    const hoy = new Date();
-    const diaActual = Math.floor((hoy - inicio) / (1000 * 60 * 60 * 24)) + 1;
-
-    function comenzar() {
-        document.getElementById('pantalla-inicio').style.display = 'none';
-        document.getElementById('juego').style.display = 'block';
-        if(diaActual >= 1) document.getElementById('dia1').classList.add('active');
-        // Aquí irían dia2 y dia3 con la misma lógica
+    // Función simple para cambiar de pantalla sin mirar fechas
+    function cambiar(actual, proximo) {
+        document.getElementById(actual).style.display = 'none';
+        document.getElementById(proximo).style.display = 'block';
+        document.getElementById(proximo).classList.add('active');
     }
 
     function validar1() {
-        if(document.getElementById('ans1').value.toLowerCase().includes("kokushibo") && document.getElementById('ans2').value == "2") {
-            alert("¡Día 1 completado! Vuelve mañana.");
-        } else { alert("Recuerdo incorrecto..."); }
+        let r1 = document.getElementById('ans1').value.toLowerCase();
+        let r2 = document.getElementById('ans2').value;
+        if(r1.includes("kokushibo") && r2 == "2") {
+            cambiar('dia1', 'dia2');
+        } else { alert("Revisa el Día 1"); }
+    }
+
+    function validar2() {
+        let r3 = document.getElementById('ans3').value.toLowerCase();
+        let r4 = document.getElementById('ans4').value.toLowerCase();
+        if((r3.includes("neblina") || r3.includes("oboro")) && r4.includes("kanamori")) {
+            cambiar('dia2', 'dia3');
+        } else { alert("Revisa el Día 2"); }
+    }
+
+    function validar3() {
+        let r5 = document.getElementById('ans5').value.toLowerCase();
+        let r6 = document.getElementById('ans6').value.toLowerCase();
+        if(r5.includes("nube") && (r6.includes("telas") || r6.includes("guardamano"))) {
+            cambiar('dia3', 'final');
+        } else { alert("Revisa el Día 3"); }
     }
 </script>
 </body>
