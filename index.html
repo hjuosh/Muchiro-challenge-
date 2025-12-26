@@ -43,7 +43,7 @@
 
             <div id="game-content" style="display:none;">
                 <div id="day1" class="step">
-                    <h2>DÍA 1</h2>
+                    <h2>DÍA 1 (26 Dic)</h2>
                     <p>¿De qué Luna Superior es descendiente?</p>
                     <input type="text" id="ans1">
                     <p>¿En cuántos meses fue Pilar?</p>
@@ -52,7 +52,7 @@
                 </div>
 
                 <div id="day2" class="step">
-                    <h2>DÍA 2</h2>
+                    <h2>DÍA 2 (27 Dic)</h2>
                     <p>¿Nombre de la 7ma postura?</p>
                     <input type="text" id="ans3">
                     <p>¿Cómo se llama su herrero?</p>
@@ -61,7 +61,7 @@
                 </div>
 
                 <div id="day3" class="step">
-                    <h2>DÍA 3</h2>
+                    <h2>DÍA 3 (28 Dic)</h2>
                     <p>¿Qué forma tiene su marca?</p>
                     <input type="text" id="ans5">
                     <p>¿Qué detalle de su hermano lleva en la espada?</p>
@@ -73,23 +73,17 @@
             <div id="final" class="step">
                 <h1 style="color: var(--cyan);">✨ MEMORIA RECUPERADA ✨</h1>
                 <img src="tenor.gif" style="width:100%; border-radius:15px; margin-bottom:15px;">
-                
-                <p style="font-style: italic; color: #a0eef0;">
-                    "Incluso si pierdes tus recuerdos, tu cuerpo siempre recordará la fuerza de tu corazón."
-                </p>
-
+                <p style="font-style: italic; color: #a0eef0;">"Incluso si pierdes tus recuerdos, tu cuerpo siempre recordará la fuerza de tu corazón."</p>
                 <div class="prize-banner">
                     <span style="font-size: 1.2rem;">🏆 ¡MISIÓN CUMPLIDA!</span><br><br>
                     Encontrarás a Muichiro esperándote en tu habitación...<br>
                     <span style="color: #008080; font-size: 1.1rem;">¡VE Y RESCÁTALO!</span>
                 </div>
-
                 <div class="posdata">
                     <b>P.D. de Muichiro:</b><br>
                     "He dejado algo más para ti junto a mí: un <b>Atrapasueños</b>. Es un amuleto antiguo que filtra la niebla de la noche, dejando pasar solo los sueños hermosos y atrapando las pesadillas en su red para que se desvanezcan con el sol. <br><br>
                     Te lo regalo para que <b>sigas siempre tus sueños</b>, sin importar cuánta adversidad encuentres en el camino. Así como tú me rescataste de la niebla hoy, usa este amuleto para recordarte que siempre puedes rescatarte a ti misma. Tu voluntad es tu luz propia."
-                    
-                    <img src="atrapasueños.png" class="dreamcatcher-img" alt="Muichiro Atrapasueños">
+                    <img src="atrapasueños.png" class="dreamcatcher-img">
                 </div>
             </div>
         </div>
@@ -97,7 +91,8 @@
 </div>
 
 <script>
-    const startDate = new Date(2025, 11, 25); 
+    // El inicio es mañana 26 de Diciembre (Mes 11 en JS es Diciembre)
+    const startDate = new Date(2025, 11, 26); 
     const today = new Date();
     const diffDays = Math.floor((today - startDate) / (1000 * 60 * 60 * 24)) + 1;
 
@@ -112,7 +107,7 @@
         } else if (diffDays >= 3) {
             document.getElementById('day3').classList.add('active');
         } else {
-            alert("Vuelve el 25 de diciembre.");
+            alert("La niebla aún no se ha formado. El camino se abrirá el 26 de diciembre.");
             location.reload();
         }
     }
