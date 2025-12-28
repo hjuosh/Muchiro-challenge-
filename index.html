@@ -8,35 +8,42 @@
     <script type="module">
         import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-        // 1. CONFIGURACIÓN - API KEY INTEGRADA
+        // CONFIGURACIÓN - Tu llave actual
         const API_KEY = "AIzaSyAvMft71HUbpDO6XV6-7csGG5wRznc-Zag"; 
 
         const genAI = new GoogleGenerativeAI(API_KEY);
+        
+        // CORRECCIÓN: Usamos una configuración más robusta para evitar el error 404
         const model = genAI.getGenerativeModel({ 
             model: "gemini-1.5-flash",
-            systemInstruction: "Eres Muichiro Tokito. Eres un poco distraído pero poético. Ayuda a la niña con pistas. NUNCA digas 'Kanamori' ni 'Oboro' directamente. Si pregunta por el herrero, dile que usa gafas y es amigo de Haganezuka. Si pregunta por la 7ma postura, di que es una neblina que confunde."
         });
 
-        let chat = model.startChat({ history: [] });
+        // Instrucciones de personalidad para Muichiro
+        const systemPrompt = "Eres Muichiro Tokito de Demon Slayer. Eres distraído y poético. Ayuda con pistas pero NUNCA digas 'Kanamori' ni 'Oboro' directamente. Si preguntan por el herrero, di que usa gafas. Si preguntan por la 7ma postura, di que confunde como la neblina.";
 
-        // Hacer funciones accesibles
+        let chat = model.startChat({
+            history: [
+                { role: "user", parts: [{ text: systemPrompt }] },
+                { role: "model", parts: [{ text: "Entendido. La niebla se disipa un poco... ¿qué quieres saber?" }] }
+            ],
+        });
+
         window.preguntarGemini = async () => {
             const input = document.getElementById('chat-input');
             const log = document.getElementById('chat-log');
             if (!input.value) return;
 
-            log.innerHTML += `<div>Tú: ${input.value}</div>`;
+            log.innerHTML += `<div><b>Tú:</b> ${input.value}</div>`;
             const userMsg = input.value;
             input.value = "";
 
             try {
-                // ARREGLO REALIZADO: Se eliminó la validación que causaba el error 400
                 const result = await chat.sendMessage(userMsg);
                 const response = await result.response;
-                log.innerHTML += `<div style="color:#5de2e7; font-style:italic;">Muichiro: ${response.text()}</div>`;
+                log.innerHTML += `<div style="color:#5de2e7; font-style:italic; margin-top:5px;">Muichiro: ${response.text()}</div>`;
             } catch (err) {
-                console.error(err);
-                log.innerHTML += `<div style="color:orange;">Muichiro: La niebla está densa... (Error de conexión. Si usas Brave, desactiva el escudo del león).</div>`;
+                console.error("Error detallado:", err);
+                log.innerHTML += `<div style="color:orange; margin-top:5px;">Muichiro: La niebla volvió... (Si usas Brave, desactiva el escudo del león arriba a la derecha).</div>`;
             }
             log.scrollTop = log.scrollHeight;
         };
@@ -54,8 +61,8 @@
         button { background: var(--cyan); color: #0b1014; border: none; padding: 15px; border-radius: 50px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
         .step { display: none; }
         .active { display: block; }
-        #chat-window { display: none; position: fixed; bottom: 80px; right: 20px; width: 280px; background: #0b1014; border: 2px solid var(--cyan); border-radius: 15px; padding: 15px; text-align: left; z-index: 100; }
-        #chat-log { height: 150px; overflow-y: auto; font-size: 0.8rem; margin-bottom: 10px; }
+        #chat-window { display: none; position: fixed; bottom: 80px; right: 20px; width: 280px; background: #0b1014; border: 2px solid var(--cyan); border-radius: 15px; padding: 15px; text-align: left; z-index: 100; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        #chat-log { height: 180px; overflow-y: auto; font-size: 0.85rem; margin-bottom: 10px; padding-right: 5px; }
         .prize-banner { background: #fff; color: #000; padding: 15px; border-radius: 15px; font-weight: bold; margin-top: 20px; border: 3px dashed var(--cyan); }
     </style>
 </head>
@@ -104,8 +111,10 @@
     
     <div id="chat-window">
         <div id="chat-log">Muichiro: ¿Necesitas ayuda con los recuerdos?</div>
-        <input type="text" id="chat-input" placeholder="Escribe aquí..." style="width:70%; font-size:0.8rem;">
-        <button onclick="preguntarGemini()" style="width:25%; padding:5px; font-size:0.7rem;">Ir</button>
+        <div style="display:flex; gap:5px;">
+            <input type="text" id="chat-input" placeholder="Escribe..." style="width:70%; font-size:0.8rem; margin:0;">
+            <button onclick="preguntarGemini()" style="width:25%; padding:5px; font-size:0.7rem; margin:0;">Ir</button>
+        </div>
     </div>
 </div>
 
@@ -134,6 +143,10 @@
             document.getElementById('final').classList.add('active');
         } else { alert("Casi lo logras... revisa el Día 3"); }
     }
+    // Enviar con Enter
+    document.getElementById('chat-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') window.preguntarGemini();
+    });
 </script>
 </body>
 </html>
