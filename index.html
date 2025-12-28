@@ -1,126 +1,40 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Muichiro Quest - Consultor Activo</title>
-    <style>
-        :root { --cyan: #5de2e7; --dark: #0b1014; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--dark); color: white; margin: 0; padding: 0; text-align: center; }
-        .main-wrapper { background: linear-gradient(180deg, #0b1014 0%, #1a2d2f 100%); min-height: 100vh; padding: 20px; }
-        .container { max-width: 400px; margin: auto; position: relative; }
-        .hero-img { width: 100%; border-radius: 20px; border: 2px solid var(--cyan); box-shadow: 0 0 25px rgba(93, 226, 231, 0.4); margin-bottom: 20px; }
-        .card { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); border-radius: 25px; padding: 25px; border: 1px solid rgba(93, 226, 231, 0.2); }
-        h1 { color: var(--cyan); letter-spacing: 1px; font-size: 1.4rem; }
-        input { width: 85%; padding: 12px; margin: 15px 0; border-radius: 10px; border: 1px solid var(--cyan); background: #111; color: white; text-align: center; }
-        button { background: var(--cyan); color: #0b1014; border: none; padding: 15px 30px; font-weight: bold; border-radius: 50px; cursor: pointer; width: 100%; font-size: 1rem; margin-top: 10px; }
-        .step { display: none; }
-        .active { display: block; animation: fadeIn 0.4s; }
-
-        /* Estilos del Consultor de Recuerdos */
-        #btn-consultor { position: fixed; bottom: 20px; right: 20px; background: var(--cyan); border-radius: 50%; width: 60px; height: 60px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 0 15px var(--cyan); z-index: 100; border: none; }
-        #chat-window { display: none; position: fixed; bottom: 90px; right: 20px; width: 280px; background: #111; border: 2px solid var(--cyan); border-radius: 15px; padding: 15px; z-index: 101; text-align: left; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
-        #chat-log { height: 150px; overflow-y: auto; font-size: 0.85rem; color: #a0eef0; margin-bottom: 10px; padding-right: 5px; }
-        .bot-msg { margin-bottom: 10px; border-left: 2px solid var(--cyan); padding-left: 8px; font-style: italic; }
-        
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .prize-banner { background: #fff; color: #000; padding: 20px; border-radius: 15px; font-weight: bold; margin-top: 20px; border: 3px dashed var(--cyan); line-height: 1.6; }
-    </style>
-</head>
-<body>
-
-<div class="main-wrapper">
-    <button id="btn-consultor" onclick="toggleChat()">🌫️</button>
-    
-    <div id="chat-window">
-        <div id="chat-log">
-            <div class="bot-msg">Muichiro: "¿Qué forma tenía esa nube?... Ah, hola. Si estás perdida en la niebla de tus recuerdos, pregúntame algo."</div>
-        </div>
-        <input type="text" id="chat-input" placeholder="Escribe tu duda..." style="width: 100%; font-size: 0.8rem; margin: 0;">
-        <button onclick="enviarDuda()" style="padding: 5px; font-size: 0.8rem; margin-top: 5px;">Consultar</button>
-    </div>
-
-    <div class="container">
-        <img src="muichiro-tokito.jpg" class="hero-img">
-
-        <div class="card">
-            <div id="intro-screen" class="active">
-                <h1>MUICHIRO QUEST</h1>
-                <p>Día 2: Forja y Neblina</p>
-                <button onclick="iniciarPorFecha()">CONTINUAR SUEÑO</button>
-            </div>
-
-            <div id="game-content" style="display:none;">
-                <div id="day1" class="step">
-                    <h2>DÍA 1</h2>
-                    <p>Ya has superado este nivel.</p>
-                </div>
-
-                <div id="day2" class="step">
-                    <h2>DÍA 2</h2>
-                    <p>¿Nombre de la 7ma postura de la Respiración de la Niebla?</p>
-                    <input type="text" id="ans3">
-                    <p>¿Quién es el herrero que forja sus espadas actualmente?</p>
-                    <input type="text" id="ans4">
-                    <button onclick="validar2()">SELLAR RECUERDO</button>
-                </div>
-
-                <div id="day3" class="step">
-                    <h2>DÍA 3</h2>
-                    <p>Mañana se revelará el secreto final...</p>
-                </div>
-            </div>
-
-            <div id="final" class="step">
-                </div>
-        </div>
-    </div>
-</div>
-
 <script>
-    const startDate = new Date(2025, 11, 26); // Inició el 26
-    const today = new Date();
-    const diffDays = Math.floor((today - startDate) / (1000 * 60 * 60 * 24)) + 1;
+    const API_KEY = 'AIzaSyCWb6tCNEWKZAupPeL9AzDr1bYhjUJVD2Q'; // 👈 PEGA TU LLAVE AQUÍ
 
-    function iniciarPorFecha() {
-        document.getElementById('intro-screen').style.display = 'none';
-        document.getElementById('game-content').style.display = 'block';
-        if (diffDays === 1) document.getElementById('day1').classList.add('active');
-        else if (diffDays === 2) document.getElementById('day2').classList.add('active');
-        else if (diffDays >= 3) document.getElementById('day3').classList.add('active');
-    }
-
-    // LÓGICA DEL CONSULTOR DE RECUERDOS
-    function toggleChat() {
-        const win = document.getElementById('chat-window');
-        win.style.display = win.style.display === 'block' ? 'none' : 'block';
-    }
-
-    function enviarDuda() {
+    async function enviarDuda() {
         const input = document.getElementById('chat-input');
         const log = document.getElementById('chat-log');
-        const duda = input.value.toLowerCase();
-        let respuesta = "Muichiro: Lo siento, me distraje mirando un pájaro... ¿qué me preguntaste? Intenta con palabras como 'herrero', 'postura' o 'marca'.";
+        const userText = input.value;
+        if (!userText) return;
 
-        if (duda.includes("herrero") || duda.includes("tetsuido") || duda.includes("espada")) {
-            respuesta = "Muichiro: Tetsuido-san fue un gran hombre, él entendía mi corazón... pero tras su partida, un herrero joven con gafas se encargó de mis espadas. ¿Recuerdas quién buscaba a Haganezuka conmigo?";
-        } else if (duda.includes("postura") || duda.includes("séptima") || duda.includes("septima")) {
-            respuesta = "Muichiro: Mi séptima postura confunde al enemigo... es como la neblina que aparece y desaparece. Su nombre suena como el fenómeno que oculta las montañas.";
-        }
-
-        log.innerHTML += `<div class="bot-msg">${respuesta}</div>`;
-        log.scrollTop = log.scrollHeight;
+        // Mostrar mensaje del usuario
+        log.innerHTML += `<div style="text-align:right; color:white; margin-bottom:10px;">${userText}</div>`;
         input.value = "";
-    }
 
-    function validar2() {
-        let a3 = document.getElementById('ans3').value.toLowerCase();
-        let a4 = document.getElementById('ans4').value.toLowerCase();
-        if((a3.includes("neblina") || a3.includes("oboro")) && a4.includes("kanamori")) {
-            alert("¡Día 2 completado! Mañana será el gran final.");
-            location.reload();
-        } else { alert("La niebla aún es espesa... usa el Consultor si necesitas ayuda."); }
+        try {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{
+                            text: `Eres Muichiro Tokito de Demon Slayer. Tu personalidad es distraída, a veces olvidas cosas, pero eres amable. 
+                            REGLA DE ORO: Si te preguntan por las respuestas del challenge (como el nombre del herrero Kanamori o la 7ma postura Neblina/Oboro), 
+                            NO DES EL NOMBRE DIRECTO. Da pistas poéticas o menciona a Tetsuido para confundir un poco antes de guiarla hacia Kanamori.
+                            Mantén respuestas cortas. 
+                            Pregunta del usuario: ${userText}`
+                        }]
+                    }]
+                })
+            });
+
+            const data = await response.json();
+            const botResponse = data.candidates[0].content.parts[0].text;
+            
+            log.innerHTML += `<div class="bot-msg">Muichiro: ${botResponse}</div>`;
+            log.scrollTop = log.scrollHeight;
+        } catch (error) {
+            log.innerHTML += `<div class="bot-msg">Muichiro: Perdona, mi memoria se nubló... (Error de conexión)</div>`;
+        }
     }
 </script>
-</body>
-</html>
