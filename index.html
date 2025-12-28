@@ -8,7 +8,7 @@
     <script type="module">
         import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-        // 1. CONFIGURACIÓN - PEGA TU API KEY AQUÍ
+        // 1. CONFIGURACIÓN - API KEY INTEGRADA
         const API_KEY = "AIzaSyAvMft71HUbpDO6XV6-7csGG5wRznc-Zag"; 
 
         const genAI = new GoogleGenerativeAI(API_KEY);
@@ -30,13 +30,13 @@
             input.value = "";
 
             try {
-                if(API_KEY === "AIzaSyAvMft71HUbpDO6XV6-7csGG5wRznc-Zag") throw new Error("Llave no puesta");
+                // ARREGLO REALIZADO: Se eliminó la validación que causaba el error 400
                 const result = await chat.sendMessage(userMsg);
                 const response = await result.response;
                 log.innerHTML += `<div style="color:#5de2e7; font-style:italic;">Muichiro: ${response.text()}</div>`;
             } catch (err) {
                 console.error(err);
-                log.innerHTML += `<div style="color:orange;">Muichiro: La niebla está densa... (Error: Revisa que la API Key sea correcta en el código).</div>`;
+                log.innerHTML += `<div style="color:orange;">Muichiro: La niebla está densa... (Error de conexión. Si usas Brave, desactiva el escudo del león).</div>`;
             }
             log.scrollTop = log.scrollHeight;
         };
@@ -50,7 +50,7 @@
         .hero-img { width: 100%; border-radius: 20px; border: 2px solid var(--cyan); margin-bottom: 20px; }
         .card { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); border-radius: 25px; padding: 25px; border: 1px solid rgba(93, 226, 231, 0.2); }
         h1 { color: var(--cyan); font-size: 1.4rem; }
-        input { width: 85%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid var(--cyan); background: #111; color: white; text-align: center; }
+        input { width: 85%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid var(--cyan); background: #111; color: white; text-align: center; font-size: 16px; }
         button { background: var(--cyan); color: #0b1014; border: none; padding: 15px; border-radius: 50px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
         .step { display: none; }
         .active { display: block; }
