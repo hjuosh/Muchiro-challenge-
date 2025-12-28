@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Muichiro Quest - Gemini Edition</title>
+    <title>Muichiro Quest - Gemini Final</title>
     
     <script type="importmap">
     {
@@ -20,13 +20,13 @@
         .container { max-width: 400px; margin: auto; }
         .hero-img { width: 100%; border-radius: 20px; border: 2px solid var(--cyan); margin-bottom: 20px; box-shadow: 0 0 20px rgba(93, 226, 231, 0.3); }
         .card { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); border-radius: 25px; padding: 25px; border: 1px solid rgba(93, 226, 231, 0.2); }
-        h1 { color: var(--cyan); font-size: 1.4rem; margin-top: 0; }
-        input { width: 85%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid var(--cyan); background: #111; color: white; text-align: center; }
+        h1 { color: var(--cyan); font-size: 1.4rem; margin: 0 0 10px 0; }
+        input { width: 85%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid var(--cyan); background: #111; color: white; text-align: center; font-size: 16px; }
         .btn-main { background: var(--cyan); color: #0b1014; border: none; padding: 15px; border-radius: 50px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
         .step { display: none; }
         .active { display: block; animation: fadeIn 0.4s; }
         
-        /* Chat de Gemini */
+        /* Estilos Chat */
         #btn-chat { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: var(--cyan); border-radius: 50%; border: none; font-size: 1.5rem; cursor: pointer; z-index: 1000; box-shadow: 0 0 15px var(--cyan); }
         #chat-window { display: none; position: fixed; bottom: 90px; right: 20px; width: 300px; background: #0b1014; border: 2px solid var(--cyan); border-radius: 20px; padding: 15px; z-index: 1001; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         #chat-log { height: 200px; overflow-y: auto; font-size: 0.85rem; color: #a0eef0; margin-bottom: 10px; border-bottom: 1px solid rgba(93,226,231,0.2); padding-bottom: 5px; }
@@ -45,16 +45,16 @@
         <div class="card">
             <div id="pantalla-inicio" class="active">
                 <h1>MUICHIRO QUEST</h1>
-                <p style="font-style: italic; color: #a0eef0;">"La voluntad es el sol que disipa las nubes."</p>
-                <button class="btn-main" onclick="irAJuego()">CONTINUAR DESAFÍO</button>
+                <p style="font-style: italic; color: #a0eef0;">"¿Qué forma tenía esa nube? Ah, sí... el reto."</p>
+                <button class="btn-main" onclick="irAJuego()">CONTINUAR DÍA 2</button>
             </div>
 
             <div id="game-content" style="display:none;">
                 <div id="dia2" class="step active">
-                    <h2>DÍA 2</h2>
-                    <p>¿Nombre de la 7ma postura?</p>
-                    <input type="text" id="ans3" placeholder="Tu respuesta...">
-                    <p>¿Quién es su herrero actual?</p>
+                    <h2>RECUERDOS DE HOY</h2>
+                    <p>¿Nombre de la 7ma postura de la Niebla?</p>
+                    <input type="text" id="ans3" placeholder="...">
+                    <p>¿Quién es el herrero que me ayuda ahora?</p>
                     <input type="text" id="ans4" placeholder="Pista: Usa gafas...">
                     <button class="btn-main" onclick="validarDia2()">SELLAR RECUERDO</button>
                 </div>
@@ -63,13 +63,12 @@
     </div>
 
     <button id="btn-chat" onclick="toggleChat()">🌫️</button>
-
     <div id="chat-window">
         <div id="chat-log">
-            <div class="msg muichiro-msg">Muichiro: ¿Me buscabas? A veces olvido cosas... pero puedo ayudarte con la niebla de tus recuerdos.</div>
+            <div class="msg muichiro-msg">Muichiro: ...Perdí el hilo de mis pensamientos. ¿Necesitas ayuda con las respuestas?</div>
         </div>
         <div style="display: flex; gap: 5px;">
-            <input type="text" id="chat-input" placeholder="Pregúntame algo..." style="margin:0; width:70%; font-size: 0.8rem;">
+            <input type="text" id="chat-input" placeholder="Pregúntale a Muichiro..." style="margin:0; width:70%; font-size: 0.8rem; text-align: left;">
             <button onclick="preguntarGemini()" style="width:25%; background:var(--cyan); border:none; border-radius:10px; font-weight:bold; cursor:pointer;">Ir</button>
         </div>
     </div>
@@ -78,18 +77,18 @@
 <script type="module">
     import { GoogleGenerativeAI } from "@google/generative-ai";
 
-    // 1. COLOCA TU API KEY AQUÍ
-    const API_KEY = "AIzaSyCWb6tCNEWKZAupPeL9AzDr1bYhjUJVD2Q"; 
+    // --- CONFIGURACIÓN ---
+    const API_KEY = "TU_API_KEY_AQUI"; 
     
     const genAI = new GoogleGenerativeAI(API_KEY);
     const model = genAI.getGenerativeModel({ 
         model: "gemini-1.5-flash",
-        systemInstruction: "Eres Muichiro Tokito de Demon Slayer. Tu personalidad es distraída, calmada y un poco poética. Estás ayudando a una niña a resolver un reto sobre ti. REGLA SAGRADA: NUNCA digas la respuesta 'Kanamori' ni 'Oboro' directamente. Si pregunta por el herrero, dale pistas sobre Kanamori (el que usa gafas, el que es amigo de Haganezuka, el que forja para Inosuke). Si pregunta por la 7ma postura, di que es una neblina que confunde los sentidos. Si te pregunta algo que no sea del anime, di que te distrajiste mirando una nube."
+        systemInstruction: "Eres Muichiro Tokito de Demon Slayer. Personalidad: Distraído, poético, joven, a veces olvida lo que estaba diciendo. REGLA: No des las respuestas 'Kanamori' ni 'Oboro' directamente. Si preguntan por el herrero, di que es joven, usa gafas y es amigo de Haganezuka. Si preguntan por la 7ma postura, di que es una creación tuya que parece neblina que confunde al oponente. Habla como él."
     });
 
     let chat = model.startChat({ history: [] });
 
-    // Funciones Globales para que los botones HTML las vean
+    // Funciones Globales
     window.irAJuego = () => {
         document.getElementById('pantalla-inicio').style.display = 'none';
         document.getElementById('game-content').style.display = 'block';
@@ -111,11 +110,14 @@
         log.scrollTop = log.scrollHeight;
 
         try {
+            if (API_KEY === "AIzaSyCWb6tCNEWKZAupPeL9AzDr1bYhjUJVD2Q") throw new Error("Llave no configurada");
+
             const result = await chat.sendMessage(texto);
             const response = await result.response;
             log.innerHTML += `<div class="msg muichiro-msg">Muichiro: ${response.text()}</div>`;
         } catch (err) {
-            log.innerHTML += `<div class="msg muichiro-msg">Muichiro: La niebla se puso densa... intenta de nuevo.</div>`;
+            console.error(err);
+            log.innerHTML += `<div class="msg muichiro-msg" style="color: #ffb3b3;">Muichiro: La niebla está muy densa... (Error de API: Verifica tu clave o que estés usando Netlify/GitHub Pages).</div>`;
         }
         log.scrollTop = log.scrollHeight;
     };
@@ -124,12 +126,17 @@
         const r1 = document.getElementById('ans3').value.toLowerCase();
         const r2 = document.getElementById('ans4').value.toLowerCase();
         if ((r1.includes("neblina") || r1.includes("oboro")) && r2.includes("kanamori")) {
-            alert("¡Día 2 superado! Mañana será el gran rescate.");
+            alert("¡Recuerdo sellado! Mañana será el gran final.");
             location.reload();
         } else {
-            alert("Los recuerdos aún están borrosos. ¡Pregúntale a Muichiro en el botón de abajo!");
+            alert("Algo no cuadra... la niebla persiste. ¡Pregúntale a Muichiro!");
         }
     };
+
+    // Permitir enviar con Enter
+    document.getElementById('chat-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') window.preguntarGemini();
+    });
 </script>
 
 </body>
