@@ -8,22 +8,22 @@
     <script type="module">
         import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-        // API KEY ACTUALIZADA
+        // CONFIGURACIÓN - API KEY VERIFICADA
         const API_KEY = "AIzaSyAvMft71HUbpDO6XV6-7csGG5wRznc-Zag"; 
 
         const genAI = new GoogleGenerativeAI(API_KEY);
         
-        // CORRECCIÓN: Forzamos la versión v1 para evitar el error 404 de la v1beta
+        // CORRECCIÓN TÉCNICA: Forzamos 'v1' para eliminar el error 404 de tus capturas
         const model = genAI.getGenerativeModel({ 
             model: "gemini-1.5-flash",
         }, { apiVersion: 'v1' });
 
-        const systemPrompt = "Eres Muichiro Tokito de Demon Slayer. Eres distraído y poético. Ayuda con pistas pero NUNCA digas 'Kanamori' ni 'Oboro' directamente. Si preguntan por el herrero, di que usa gafas. Si preguntan por la 7ma postura, di que confunde como la neblina.";
+        const systemPrompt = "Eres Muichiro Tokito. Eres distraído y poético. Ayuda con pistas pero NUNCA digas 'Kanamori' ni 'Oboro' directamente. Si preguntan por el herrero, di que usa gafas. Si preguntan por la 7ma postura, di que confunde como la neblina.";
 
         let chat = model.startChat({
             history: [
                 { role: "user", parts: [{ text: systemPrompt }] },
-                { role: "model", parts: [{ text: "Entendido. La niebla se disipa... ¿qué quieres saber?" }] }
+                { role: "model", parts: [{ text: "La niebla se disipa... ¿en qué puedo ayudarte?" }] }
             ],
         });
 
@@ -42,7 +42,7 @@
                 log.innerHTML += `<div style="color:#5de2e7; font-style:italic; margin-top:5px;">Muichiro: ${response.text()}</div>`;
             } catch (err) {
                 console.error("Error detallado:", err);
-                log.innerHTML += `<div style="color:orange; margin-top:5px;">Muichiro: La niebla volvió... (Recuerda desactivar el escudo del león en Brave).</div>`;
+                log.innerHTML += `<div style="color:orange; margin-top:5px;">Muichiro: La niebla volvió... (Recuerda desactivar el escudo del león en Brave o probar en Chrome).</div>`;
             }
             log.scrollTop = log.scrollHeight;
         };
