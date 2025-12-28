@@ -30,7 +30,7 @@
             input.value = "";
 
             try {
-                if(API_KEY === "AIzaSyCWb6tCNEWKZAupPeL9AzDr1bYhjUJVD2Q") throw new Error("Llave no puesta");
+                if(API_KEY === "AIzaSyAvMft71HUbpDO6XV6-7csGG5wRznc-Zag") throw new Error("Llave no puesta");
                 const result = await chat.sendMessage(userMsg);
                 const response = await result.response;
                 log.innerHTML += `<div style="color:#5de2e7; font-style:italic;">Muichiro: ${response.text()}</div>`;
