@@ -4,38 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Muichiro Quest - Final</title>
-    
-    <script type="module">
-        import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
-
-        // API KEY
-        const API_KEY = "AIzaSyAvMft71HUbpDO6XV6-7csGG5wRznc-Zag"; 
-        const genAI = new GoogleGenerativeAI(API_KEY);
-
-        // CONFIGURACIÓN SIMPLIFICADA
-        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-
-        window.preguntarGemini = async () => {
-            const input = document.getElementById('chat-input');
-            const log = document.getElementById('chat-log');
-            if (!input.value) return;
-
-            log.innerHTML += `<div><b>Tú:</b> ${input.value}</div>`;
-            const prompt = `Actúa como Muichiro Tokito. Eres distraído. Da pistas sobre el herrero Kanamori y la postura Oboro sin decir sus nombres. Usuario dice: ${input.value}`;
-            input.value = "";
-
-            try {
-                const result = await model.generateContent(prompt);
-                const response = await result.response;
-                log.innerHTML += `<div style="color:#5de2e7; font-style:italic; margin-top:5px;">Muichiro: ${response.text()}</div>`;
-            } catch (err) {
-                console.error(err);
-                log.innerHTML += `<div style="color:orange; margin-top:5px;">Muichiro: La niebla persiste. (Error: ${err.message.substring(0,30)}).</div>`;
-            }
-            log.scrollTop = log.scrollHeight;
-        };
-    </script>
-
     <style>
         :root { --cyan: #5de2e7; --dark: #0b1014; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--dark); color: white; margin: 0; text-align: center; }
@@ -47,8 +15,9 @@
         button { background: var(--cyan); color: #0b1014; border: none; padding: 15px; border-radius: 50px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
         .step { display: none; }
         .active { display: block; }
-        #chat-window { display: none; position: fixed; bottom: 80px; right: 20px; width: 280px; background: #0b1014; border: 2px solid var(--cyan); border-radius: 15px; padding: 15px; text-align: left; z-index: 100; }
+        #chat-window { display: none; position: fixed; bottom: 80px; right: 20px; width: 280px; background: #0b1014; border: 2px solid var(--cyan); border-radius: 15px; padding: 15px; text-align: left; z-index: 100; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
         #chat-log { height: 180px; overflow-y: auto; font-size: 0.85rem; margin-bottom: 10px; }
+        .bot-msg { color: #5de2e7; font-style: italic; margin-top: 5px; }
     </style>
 </head>
 <body>
@@ -58,61 +27,80 @@
         <div class="card">
             <div id="pantalla-inicio" class="active">
                 <h1>MUICHIRO QUEST</h1>
-                <button onclick="irAJuego()">CONTINUAR</button>
+                <p>"La niebla se disipa ante una voluntad fuerte."</p>
+                <button onclick="irAJuego()">CONTINUAR RECUERDOS</button>
             </div>
             <div id="game-content" style="display:none;">
                 <div id="dia2" class="step active">
                     <h2>DÍA 2</h2>
                     <p>¿7ma postura?</p>
-                    <input type="text" id="ans3">
+                    <input type="text" id="ans3" placeholder="Pista: Empieza con O...">
                     <p>¿Herrero actual?</p>
-                    <input type="text" id="ans4">
-                    <button onclick="validarDia2()">SELLAR</button>
+                    <input type="text" id="ans4" placeholder="Pista: Usa gafas...">
+                    <button onclick="validarDia2()">SELLAR RECUERDO</button>
                 </div>
                 <div id="dia3" class="step">
-                    <h2>DÍA 3: FINAL</h2>
+                    <h2>DÍA 3: EL FINAL</h2>
                     <p>¿Forma de la marca?</p>
-                    <input type="text" id="ans5">
+                    <input type="text" id="ans5" placeholder="En el cielo...">
                     <p>¿Detalle en la espada?</p>
-                    <input type="text" id="ans6">
-                    <button onclick="validarDia3()">RESCATAR</button>
+                    <input type="text" id="ans6" placeholder="Parecen telas...">
+                    <button onclick="validarDia3()">RESCATAR A MUICHIRO</button>
                 </div>
             </div>
             <div id="final" class="step">
                 <h1>✨ RESCATADO ✨</h1>
-                <img src="tenor.gif" style="width:100%;">
+                <img src="tenor.gif" style="width:100%; border-radius:15px;">
                 <p>VE A TU CUARTO Y BÚSCALO...</p>
-                <img src="atrapasueños.png" style="width:100%;">
+                <img src="atrapasueños.png" style="width:100%; border-radius:15px;">
             </div>
         </div>
     </div>
     <button onclick="toggleChat()" style="position:fixed; bottom:20px; right:20px; width:60px; height:60px; border-radius:50%; background:var(--cyan); border:none; font-size:1.5rem;">🌫️</button>
     <div id="chat-window">
-        <div id="chat-log">Muichiro: ¿Necesitas pistas?</div>
-        <div style="display:flex;">
-            <input type="text" id="chat-input" placeholder="Escribe..." style="width:70%; margin:0;">
-            <button onclick="preguntarGemini()" style="width:25%; margin:0;">Ir</button>
+        <div id="chat-log"><div class="bot-msg">Muichiro: ¿Necesitas ayuda con los recuerdos? Pregúntame sobre el 'herrero' o la 'postura'.</div></div>
+        <div style="display:flex; gap:5px;">
+            <input type="text" id="chat-input" placeholder="Escribe..." style="width:70%; margin:0; text-align:left;">
+            <button onclick="ayudaLocal()" style="width:25%; padding:5px; margin:0; font-size:0.7rem;">Ir</button>
         </div>
     </div>
 </div>
+
 <script>
     function irAJuego() { document.getElementById('pantalla-inicio').style.display = 'none'; document.getElementById('game-content').style.display = 'block'; }
     function toggleChat() { const win = document.getElementById('chat-window'); win.style.display = win.style.display === 'block' ? 'none' : 'block'; }
+    
+    function ayudaLocal() {
+        const input = document.getElementById('chat-input');
+        const log = document.getElementById('chat-log');
+        const m = input.value.toLowerCase();
+        let r = "Muichiro: Me distraigo mirando las nubes... ¿qué me preguntaste? Prueba con 'herrero', 'postura' o 'marca'.";
+        
+        if(m.includes("herrero")) r = "Muichiro: El nuevo es joven, usa gafas y es amigo de Haganezuka. Empieza con K.";
+        else if(m.includes("postura")) r = "Muichiro: La séptima es como la neblina que confunde... suena como Oboro.";
+        else if(m.includes("marca")) r = "Muichiro: Mi marca tiene forma de las cosas que flotan en el cielo... nubes.";
+        
+        log.innerHTML += `<div>Tú: ${input.value}</div><div class="bot-msg">${r}</div>`;
+        input.value = "";
+        log.scrollTop = log.scrollHeight;
+    }
+
     function validarDia2() {
         const r1 = document.getElementById('ans3').value.toLowerCase();
         const r2 = document.getElementById('ans4').value.toLowerCase();
         if((r1.includes("neblina") || r1.includes("oboro")) && r2.includes("kanamori")) {
             document.getElementById('dia2').classList.remove('active');
             document.getElementById('dia3').classList.add('active');
-        } else { alert("Incorrecto"); }
+        } else { alert("La niebla persiste... consulta el chat."); }
     }
+
     function validarDia3() {
         const r1 = document.getElementById('ans5').value.toLowerCase();
         const r2 = document.getElementById('ans6').value.toLowerCase();
         if(r1.includes("nube") && (r2.includes("telas") || r2.includes("guardamano"))) {
             document.getElementById('game-content').style.display = 'none';
             document.getElementById('final').classList.add('active');
-        } else { alert("Casi..."); }
+        } else { alert("Casi lo logras..."); }
     }
 </script>
 </body>
