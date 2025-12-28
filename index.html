@@ -8,24 +8,12 @@
     <script type="module">
         import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-        // CONFIGURACIÓN - Tu API KEY verificada
+        // API KEY
         const API_KEY = "AIzaSyAvMft71HUbpDO6XV6-7csGG5wRznc-Zag"; 
-
         const genAI = new GoogleGenerativeAI(API_KEY);
-        
-        // CORRECCIÓN TÉCNICA: Forzamos 'v1' para eliminar el error 404 de tus capturas
-        const model = genAI.getGenerativeModel({ 
-            model: "gemini-1.5-flash",
-        }, { apiVersion: 'v1' });
 
-        const systemPrompt = "Eres Muichiro Tokito. Eres distraído y poético. Ayuda con pistas pero NUNCA digas 'Kanamori' ni 'Oboro' directamente. Si preguntan por el herrero, di que usa gafas y es amigo de Haganezuka. Si preguntan por la 7ma postura, di que confunde como la neblina.";
-
-        let chat = model.startChat({
-            history: [
-                { role: "user", parts: [{ text: systemPrompt }] },
-                { role: "model", parts: [{ text: "La niebla se disipa... ¿en qué puedo ayudarte?" }] }
-            ],
-        });
+        // CONFIGURACIÓN SIMPLIFICADA
+        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
         window.preguntarGemini = async () => {
             const input = document.getElementById('chat-input');
@@ -33,16 +21,16 @@
             if (!input.value) return;
 
             log.innerHTML += `<div><b>Tú:</b> ${input.value}</div>`;
-            const userMsg = input.value;
+            const prompt = `Actúa como Muichiro Tokito. Eres distraído. Da pistas sobre el herrero Kanamori y la postura Oboro sin decir sus nombres. Usuario dice: ${input.value}`;
             input.value = "";
 
             try {
-                const result = await chat.sendMessage(userMsg);
+                const result = await model.generateContent(prompt);
                 const response = await result.response;
                 log.innerHTML += `<div style="color:#5de2e7; font-style:italic; margin-top:5px;">Muichiro: ${response.text()}</div>`;
             } catch (err) {
-                console.error("Error detallado:", err);
-                log.innerHTML += `<div style="color:orange; margin-top:5px;">Muichiro: La niebla volvió... (Recuerda desactivar el escudo del león en Brave o probar en Chrome).</div>`;
+                console.error(err);
+                log.innerHTML += `<div style="color:orange; margin-top:5px;">Muichiro: La niebla persiste. (Error: ${err.message.substring(0,30)}).</div>`;
             }
             log.scrollTop = log.scrollHeight;
         };
@@ -53,88 +41,70 @@
         body { font-family: 'Segoe UI', sans-serif; background: var(--dark); color: white; margin: 0; text-align: center; }
         .main-wrapper { min-height: 100vh; padding: 20px; background: linear-gradient(180deg, #0b1014 0%, #1a2d2f 100%); }
         .container { max-width: 400px; margin: auto; }
-        .hero-img { width: 100%; border-radius: 20px; border: 2px solid var(--cyan); margin-bottom: 20px; box-shadow: 0 0 20px rgba(93, 226, 231, 0.3); }
+        .hero-img { width: 100%; border-radius: 20px; border: 2px solid var(--cyan); margin-bottom: 20px; }
         .card { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); border-radius: 25px; padding: 25px; border: 1px solid rgba(93, 226, 231, 0.2); }
-        h1 { color: var(--cyan); font-size: 1.4rem; }
         input { width: 85%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid var(--cyan); background: #111; color: white; text-align: center; font-size: 16px; }
         button { background: var(--cyan); color: #0b1014; border: none; padding: 15px; border-radius: 50px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
         .step { display: none; }
         .active { display: block; }
-        #chat-window { display: none; position: fixed; bottom: 80px; right: 20px; width: 280px; background: #0b1014; border: 2px solid var(--cyan); border-radius: 15px; padding: 15px; text-align: left; z-index: 100; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        #chat-log { height: 180px; overflow-y: auto; font-size: 0.85rem; margin-bottom: 10px; padding-right: 5px; }
-        .prize-banner { background: #fff; color: #000; padding: 15px; border-radius: 15px; font-weight: bold; margin-top: 20px; border: 3px dashed var(--cyan); }
+        #chat-window { display: none; position: fixed; bottom: 80px; right: 20px; width: 280px; background: #0b1014; border: 2px solid var(--cyan); border-radius: 15px; padding: 15px; text-align: left; z-index: 100; }
+        #chat-log { height: 180px; overflow-y: auto; font-size: 0.85rem; margin-bottom: 10px; }
     </style>
 </head>
 <body>
-
 <div class="main-wrapper">
     <div class="container">
-        <img src="muichiro-tokito.jpg" class="hero-img" alt="Muichiro">
-        
+        <img src="muichiro-tokito.jpg" class="hero-img">
         <div class="card">
             <div id="pantalla-inicio" class="active">
                 <h1>MUICHIRO QUEST</h1>
-                <p style="color: #a0eef0; font-style: italic;">"La niebla se disipa ante una voluntad fuerte."</p>
-                <button onclick="irAJuego()">CONTINUAR RECUERDOS</button>
+                <button onclick="irAJuego()">CONTINUAR</button>
             </div>
-
             <div id="game-content" style="display:none;">
                 <div id="dia2" class="step active">
                     <h2>DÍA 2</h2>
-                    <p>¿Nombre de la 7ma postura de la Niebla?</p>
-                    <input type="text" id="ans3" placeholder="Pista: Empieza con O...">
-                    <p>¿Quién es el herrero que me ayuda ahora?</p>
-                    <input type="text" id="ans4" placeholder="Pista: Amigo de Haganezuka...">
-                    <button onclick="validarDia2()">SELLAR RECUERDOS</button>
+                    <p>¿7ma postura?</p>
+                    <input type="text" id="ans3">
+                    <p>¿Herrero actual?</p>
+                    <input type="text" id="ans4">
+                    <button onclick="validarDia2()">SELLAR</button>
                 </div>
-                
                 <div id="dia3" class="step">
-                    <h2>DÍA 3: EL FINAL</h2>
-                    <p>¿Qué forma tiene mi marca de Cazador?</p>
-                    <input type="text" id="ans5" placeholder="Pista: Están en el cielo...">
-                    <p>¿Qué detalle tiene mi espada en el guardamano?</p>
-                    <input type="text" id="ans6" placeholder="Pista: Parecen telas...">
-                    <button onclick="validarDia3()">RESCATAR A MUICHIRO</button>
+                    <h2>DÍA 3: FINAL</h2>
+                    <p>¿Forma de la marca?</p>
+                    <input type="text" id="ans5">
+                    <p>¿Detalle en la espada?</p>
+                    <input type="text" id="ans6">
+                    <button onclick="validarDia3()">RESCATAR</button>
                 </div>
             </div>
-
             <div id="final" class="step">
-                <h1 style="color: var(--cyan);">✨ RESCATADO ✨</h1>
-                <img src="tenor.gif" style="width:100%; border-radius:15px;" alt="Celebración">
-                <div class="prize-banner">VE A TU CUARTO Y BÚSCALO...</div>
-                <p style="font-size: 0.8rem; margin-top: 15px;">P.D. Te regalo este Atrapasueños para que siempre te rescates a ti misma.</p>
-                <img src="atrapasueños.png" style="width:100%; border-radius:15px;" alt="Atrapasueños">
+                <h1>✨ RESCATADO ✨</h1>
+                <img src="tenor.gif" style="width:100%;">
+                <p>VE A TU CUARTO Y BÚSCALO...</p>
+                <img src="atrapasueños.png" style="width:100%;">
             </div>
         </div>
     </div>
-
-    <button onclick="toggleChat()" style="position:fixed; bottom:20px; right:20px; width:60px; height:60px; border-radius:50%; background:var(--cyan); border:none; font-size:1.5rem; cursor:pointer; box-shadow: 0 0 15px var(--cyan);">🌫️</button>
-    
+    <button onclick="toggleChat()" style="position:fixed; bottom:20px; right:20px; width:60px; height:60px; border-radius:50%; background:var(--cyan); border:none; font-size:1.5rem;">🌫️</button>
     <div id="chat-window">
-        <div id="chat-log">Muichiro: ¿Necesitas ayuda con los recuerdos?</div>
-        <div style="display:flex; gap:5px;">
-            <input type="text" id="chat-input" placeholder="Escribe..." style="width:70%; font-size:0.8rem; margin:0; text-align: left;">
-            <button onclick="preguntarGemini()" style="width:25%; padding:5px; font-size:0.7rem; margin:0;">Ir</button>
+        <div id="chat-log">Muichiro: ¿Necesitas pistas?</div>
+        <div style="display:flex;">
+            <input type="text" id="chat-input" placeholder="Escribe..." style="width:70%; margin:0;">
+            <button onclick="preguntarGemini()" style="width:25%; margin:0;">Ir</button>
         </div>
     </div>
 </div>
-
 <script>
-    function irAJuego() {
-        document.getElementById('pantalla-inicio').style.display = 'none';
-        document.getElementById('game-content').style.display = 'block';
-    }
-    function toggleChat() {
-        const win = document.getElementById('chat-window');
-        win.style.display = win.style.display === 'block' ? 'none' : 'block';
-    }
+    function irAJuego() { document.getElementById('pantalla-inicio').style.display = 'none'; document.getElementById('game-content').style.display = 'block'; }
+    function toggleChat() { const win = document.getElementById('chat-window'); win.style.display = win.style.display === 'block' ? 'none' : 'block'; }
     function validarDia2() {
         const r1 = document.getElementById('ans3').value.toLowerCase();
         const r2 = document.getElementById('ans4').value.toLowerCase();
         if((r1.includes("neblina") || r1.includes("oboro")) && r2.includes("kanamori")) {
             document.getElementById('dia2').classList.remove('active');
             document.getElementById('dia3').classList.add('active');
-        } else { alert("Respuesta incorrecta. ¡Usa el chat con Muichiro para pistas!"); }
+        } else { alert("Incorrecto"); }
     }
     function validarDia3() {
         const r1 = document.getElementById('ans5').value.toLowerCase();
@@ -142,11 +112,8 @@
         if(r1.includes("nube") && (r2.includes("telas") || r2.includes("guardamano"))) {
             document.getElementById('game-content').style.display = 'none';
             document.getElementById('final').classList.add('active');
-        } else { alert("Casi lo logras... revisa bien el Día 3"); }
+        } else { alert("Casi..."); }
     }
-    document.getElementById('chat-input').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') window.preguntarGemini();
-    });
 </script>
 </body>
 </html>
