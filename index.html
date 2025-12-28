@@ -8,23 +8,23 @@
     <script type="module">
         import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-        // CONFIGURACIÓN - Tu llave actual
+        // CONFIGURACIÓN - Tu clave de API actual
         const API_KEY = "AIzaSyAvMft71HUbpDO6XV6-7csGG5wRznc-Zag"; 
 
         const genAI = new GoogleGenerativeAI(API_KEY);
         
-        // CORRECCIÓN: Usamos una configuración más robusta para evitar el error 404
+        // CORRECCIÓN: Configuración para evitar el error 404 de modelo no encontrado
         const model = genAI.getGenerativeModel({ 
             model: "gemini-1.5-flash",
         });
 
-        // Instrucciones de personalidad para Muichiro
-        const systemPrompt = "Eres Muichiro Tokito de Demon Slayer. Eres distraído y poético. Ayuda con pistas pero NUNCA digas 'Kanamori' ni 'Oboro' directamente. Si preguntan por el herrero, di que usa gafas. Si preguntan por la 7ma postura, di que confunde como la neblina.";
+        // Prompt de sistema para definir la personalidad de Muichiro
+        const systemPrompt = "Eres Muichiro Tokito de Demon Slayer. Tu personalidad es distraída y poética. Ayuda a una niña con pistas pero NUNCA digas 'Kanamori' ni 'Oboro' directamente. Si preguntan por el herrero, di que usa gafas. Si preguntan por la 7ma postura, di que confunde como la neblina.";
 
         let chat = model.startChat({
             history: [
                 { role: "user", parts: [{ text: systemPrompt }] },
-                { role: "model", parts: [{ text: "Entendido. La niebla se disipa un poco... ¿qué quieres saber?" }] }
+                { role: "model", parts: [{ text: "Entendido. La niebla se disipa... ¿qué quieres saber?" }] }
             ],
         });
 
@@ -143,7 +143,6 @@
             document.getElementById('final').classList.add('active');
         } else { alert("Casi lo logras... revisa el Día 3"); }
     }
-    // Enviar con Enter
     document.getElementById('chat-input').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') window.preguntarGemini();
     });
