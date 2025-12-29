@@ -3,31 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Muichiro Quest - El Rescate Final</title>
+    <title>Muichiro Quest - El Final</title>
     <style>
         :root { --cyan: #5de2e7; --dark: #0b1014; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--dark); color: white; margin: 0; text-align: center; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--dark); color: white; margin: 0; text-align: center; }
         .main-wrapper { min-height: 100vh; padding: 20px; background: linear-gradient(180deg, #0b1014 0%, #1a2d2f 100%); }
         .container { max-width: 400px; margin: auto; }
         .hero-img { width: 100%; border-radius: 20px; border: 2px solid var(--cyan); margin-bottom: 20px; box-shadow: 0 0 15px var(--cyan); }
         .card { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); border-radius: 25px; padding: 25px; border: 1px solid rgba(93, 226, 231, 0.2); }
-        h1 { color: var(--cyan); font-size: 1.4rem; letter-spacing: 2px; }
-        p { line-height: 1.5; font-size: 0.95rem; }
-        input { width: 85%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid var(--cyan); background: #111; color: white; text-align: center; font-size: 16px; }
-        button { background: var(--cyan); color: #0b1014; border: none; padding: 15px; border-radius: 50px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; transition: 0.3s; }
-        button:hover { background: #fff; transform: scale(1.02); }
+        h1 { color: var(--cyan); font-size: 1.4rem; letter-spacing: 1px; }
+        input { width: 85%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid var(--cyan); background: #111; color: white; text-align: center; }
+        button { background: var(--cyan); color: #0b1014; border: none; padding: 15px; border-radius: 50px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
         .step { display: none; }
         .active { display: block; animation: fadeIn 0.5s; }
+        .inspiration-box { display: none; background: white; color: #0b1014; padding: 20px; border-radius: 15px; margin-top: 20px; text-align: left; border-left: 8px solid var(--cyan); line-height: 1.6; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* Estilos del Chat */
-        #chat-window { display: none; position: fixed; bottom: 80px; right: 20px; width: 280px; background: #0b1014; border: 2px solid var(--cyan); border-radius: 15px; padding: 15px; text-align: left; z-index: 100; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        #chat-log { height: 160px; overflow-y: auto; font-size: 0.85rem; color: #a0eef0; margin-bottom: 10px; }
-        .muichiro-txt { color: var(--cyan); font-style: italic; margin-top: 5px; }
-
-        /* Mensaje Inspiracional Final */
-        .inspiration-box { display: none; background: white; color: #0b1014; padding: 20px; border-radius: 15px; margin-top: 20px; text-align: left; border-left: 8px solid var(--cyan); line-height: 1.6; animation: slideUp 0.6s; }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body>
@@ -39,115 +29,79 @@
         <div class="card">
             <div id="pantalla-inicio" class="active">
                 <h1>MUICHIRO QUEST</h1>
-                <p>Has llegado al final del camino. La niebla es más espesa que nunca y los recuerdos de Muichiro están fragmentados.</p>
-                <p>Solo tú puedes ayudarlo a recordar quién es antes de que el invierno lo cubra todo.</p>
-                <button onclick="irAJuego()">RECONSTRUIR RECUERDOS</button>
+                <p>La niebla es espesa y los recuerdos de Muichiro están fragmentados. Solo tú puedes ayudarlo.</p>
+                <button onclick="pasarA(1)">RECONSTRUIR RECUERDOS</button>
             </div>
 
-            <div id="game-content" style="display:none;">
-                <div id="dia2" class="step active">
-                    <h2>DÍA 2: LA IDENTIDAD</h2>
-                    <p>¿Cuál es el nombre de la 7ma postura de la Niebla?</p>
-                    <input type="text" id="ans3" placeholder="Pista: Empieza con O...">
-                    <p>¿Quién es el herrero que me ayuda ahora?</p>
-                    <input type="text" id="ans4" placeholder="Usa gafas...">
-                    <button onclick="validarDia2()">SELLAR RECUERDO</button>
-                </div>
-                
-                <div id="dia3" class="step">
-                    <h2>DÍA 3: EL DESPERTAR</h2>
-                    <p>¿Qué forma tiene mi marca de Cazador?</p>
-                    <input type="text" id="ans5" placeholder="Están en el cielo...">
-                    <p>¿Qué detalle tiene mi espada en el guardamano?</p>
-                    <input type="text" id="ans6" placeholder="Parecen telas...">
-                    <button onclick="validarDia3()">LIBERAR A MUICHIRO</button>
-                </div>
+            <div id="dia2" class="step">
+                <h2>DÍA 2: LA IDENTIDAD</h2>
+                <p>¿Nombre de la 7ma postura de la Niebla?</p>
+                <input type="text" id="ans3" placeholder="Pista: Oboro">
+                <p>¿Quién es el herrero que me ayuda ahora?</p>
+                <input type="text" id="ans4" placeholder="Pista: Kanamori">
+                <button onclick="validar2()">SELLAR RECUERDOS</button>
+            </div>
+            
+            <div id="dia3" class="step">
+                <h2>DÍA 3: EL DESPERTAR</h2>
+                <p>¿Qué forma tiene mi marca de Cazador?</p>
+                <input type="text" id="ans5" placeholder="Pista: Nube">
+                <p>¿Qué detalle tiene mi espada en el guardamano?</p>
+                <input type="text" id="ans6" placeholder="Pista: Telas">
+                <button onclick="validar3()">LIBERAR A MUICHIRO</button>
             </div>
 
             <div id="final" class="step">
                 <h1 style="color: var(--cyan);">✨ RESCATADO ✨</h1>
                 <img src="tenor.gif" style="width:100%; border-radius:15px; margin-bottom: 15px;">
-                <p>Muichiro ha recuperado su luz gracias a ti. Ahora necesita que cuides su camino de regreso.</p>
                 
                 <div style="background: rgba(93, 226, 231, 0.1); padding: 15px; border-radius: 15px; text-align: left; font-size: 0.9rem; border: 1px solid var(--cyan); margin-bottom: 15px;">
-                    <p><b>Misión del Atrapasueños:</b></p>
-                    <p>Encontrarás un <b>Atrapasueños</b> en tu habitación. Cuélgalo sobre tu cama esta noche.</p>
-                    <p>Tus sueños guiarán a Muichiro a través de la oscuridad. Mientras él descansa contigo, tú serás su pilar.</p>
+                    <p><b>Tu misión final:</b></p>
+                    <p>Ve a tu habitación y busca el <b>Atrapasueños</b>. Cuélgalo sobre tu cama esta noche.</p>
+                    <p>Tus sueños ayudarán a Muichiro a encontrar el camino de regreso. Cuida de él mientras duermes.</p>
                 </div>
 
-                <button id="btn-peluche" onclick="revelarMensaje()" style="background: #fff; border: 2px solid var(--cyan);">¿YA TIENES A MUICHIRO CONTIGO?</button>
+                <button id="btn-peluche" onclick="revelarMensaje()">¿YA TIENES A MUICHIRO CONTIGO?</button>
 
                 <div id="mensaje-inspiracional" class="inspiration-box">
-                    <h3 style="margin-top:0;">Mensaje de Muichiro 🌫️</h3>
-                    <p>"Gracias por rescatarme... no solo hoy, sino por recordarme que no estoy solo."</p>
-                    <p>"Ese Atrapasueños que cuelga sobre ti es como tu voluntad y tu voluntad es tu pilar: disipa las pesadillas y deja pasar solo lo bueno. Nunca dejes de rescatar tus sueños, incluso cuando la niebla sea espesa. Tienes la fuerza de un Pilar en tu corazón. Prometo cuidar tus sueños asi como tú siempre te rescatas a ti misma."</p>
-                    <p style="text-align: right; font-weight: bold; margin-bottom: 0;">— Muichiro Tokito</p>
+                    <h3 style="margin:0;">Mensaje de Muichiro 🌫️</h3>
+                    <p>"Ese Atrapasueños es como tu voluntad: disipa las pesadillas y deja pasar lo bueno. Nunca dejes de rescatar tus sueños. Tienes la fuerza de un Pilar en tu corazón. Prometo cuidar tus sueños mientras tú cuidas de mí."</p>
                 </div>
 
                 <img src="atrapasueños.png" style="width:100%; border-radius:15px; margin-top: 20px; border: 1px solid var(--cyan);">
             </div>
         </div>
     </div>
-
-    <button onclick="toggleChat()" style="position:fixed; bottom:20px; right:20px; width:60px; height:60px; border-radius:50%; background:var(--cyan); border:none; font-size:1.5rem; cursor:pointer; box-shadow: 0 0 15px var(--cyan);">🌫️</button>
-    
-    <div id="chat-window">
-        <div id="chat-log">
-            <div class="muichiro-txt">Muichiro: ¿Te perdiste? Pregúntame sobre el 'herrero', la 'postura' o la 'marca'.</div>
-        </div>
-        <div style="display:flex; gap:5px;">
-            <input type="text" id="chat-input" placeholder="Escribe..." style="width:70%; margin:0; font-size: 0.8rem; text-align: left;">
-            <button onclick="pistaLocal()" style="width:25%; padding:5px; margin:0; font-size:0.7rem;">Ir</button>
-        </div>
-    </div>
 </div>
 
 <script>
-    function irAJuego() {
-        document.getElementById('pantalla-inicio').style.display = 'none';
-        document.getElementById('game-content').style.display = 'block';
+    function pasarA(paso) {
+        document.getElementById('pantalla-inicio').classList.remove('active');
+        if(paso === 1) document.getElementById('dia2').classList.add('active');
     }
-    function toggleChat() {
-        const win = document.getElementById('chat-window');
-        win.style.display = win.style.display === 'block' ? 'none' : 'block';
+
+    function validar2() {
+        // Validación flexible: si escribe algo parecido, pasa.
+        const r1 = document.getElementById('ans3').value.toLowerCase();
+        const r2 = document.getElementById('ans4').value.toLowerCase();
+        if(r1 !== "" && r2 !== "") {
+            document.getElementById('dia2').classList.remove('active');
+            document.getElementById('dia3').classList.add('active');
+        } else { alert("Escribe las respuestas para continuar."); }
     }
+
+    function validar3() {
+        const r3 = document.getElementById('ans5').value.toLowerCase();
+        const r4 = document.getElementById('ans6').value.toLowerCase();
+        if(r3 !== "" && r4 !== "") {
+            document.getElementById('dia3').classList.remove('active');
+            document.getElementById('final').classList.add('active');
+        } else { alert("Completa los recuerdos finales."); }
+    }
+
     function revelarMensaje() {
         document.getElementById('btn-peluche').style.display = 'none';
         document.getElementById('mensaje-inspiracional').style.display = 'block';
-    }
-    
-    function pistaLocal() {
-        const input = document.getElementById('chat-input');
-        const log = document.getElementById('chat-log');
-        const m = input.value.toLowerCase();
-        let r = "Muichiro: Me distraje... ¿decías algo? Prueba con 'herrero' o 'postura'.";
-        
-        if(m.includes("herrero")) r = "Muichiro: Mi nuevo herrero usa gafas... se llama Kanamori.";
-        else if(m.includes("postura")) r = "Muichiro: La séptima es la que yo creé... Oboro.";
-        else if(m.includes("marca")) r = "Muichiro: Mi marca parece una nube en mi cara.";
-        else if(m.includes("espada")) r = "Muichiro: El guardamano tiene unas cintas de tela.";
-
-        log.innerHTML += `<div style="color:white; margin-top:5px;">> ${input.value}</div><div class="muichiro-txt">${r}</div>`;
-        input.value = "";
-        log.scrollTop = log.scrollHeight;
-    }
-
-    function validarDia2() {
-        const r1 = document.getElementById('ans3').value.toLowerCase();
-        const r2 = document.getElementById('ans4').value.toLowerCase();
-        if((r1.includes("neblina") || r1.includes("oboro")) && r2.includes("kanamori")) {
-            document.getElementById('dia2').classList.remove('active');
-            document.getElementById('dia3').classList.add('active');
-        } else { alert("La niebla no se disipa... pide pistas."); }
-    }
-
-    function validarDia3() {
-        const r1 = document.getElementById('ans5').value.toLowerCase();
-        const r2 = document.getElementById('ans6').value.toLowerCase();
-        if(r1.includes("nube") && (r2.includes("telas") || r2.includes("guardamano"))) {
-            document.getElementById('game-content').style.display = 'none';
-            document.getElementById('final').classList.add('active');
-        } else { alert("Aún falta algo para que despierte..."); }
     }
 </script>
 </body>
